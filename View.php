@@ -16,7 +16,7 @@ class View
     {
         $layout = Application::$app->controller->getLayout();
         ob_start();
-        require_once __DIR__ . "/../resources/views/layouts/$layout.php";
+        require_once Application::$rootDir . "/resources/views/layouts/$layout.php";
         return ob_get_clean();
     }
 
@@ -27,7 +27,7 @@ class View
             $$key = $value;
         }
         ob_start();
-        require_once __DIR__ . "/../resources/views/$view.php";
+        require_once Application::$rootDir . "/resources/views/$view.php";
         return ob_get_clean();
     }
 
