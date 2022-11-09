@@ -6,6 +6,10 @@ use App\Controllers\Controller;
 
 class Application
 {
+    public const EVENT_BEFORE_REQUEST = 'beforeRequest';
+    public const EVENT_AFTER_REQUEST = 'afterRequest';
+    public array $eventListeners = [];
+
     public Router $router;
     public Request $request;
     public Response $response;
@@ -42,6 +46,7 @@ class Application
 
     public function run()
     {
+        $this->trigerEvent(Application::EVENT_BEFORE_REQUEST);
         try {
             echo $this->router->resolve();
         } catch (\Exception $exception) {
@@ -70,6 +75,17 @@ class Application
     {
         self::$app->session->forget('user');
         self::$app->response->redirect('/');
+    }
+
+    public function trigerEvent($event)
+    {
+        $callbacks = $this->eventListeners[$event] ?? [];
+        foreach ($callbacks as $callback){
+            call_user_func($callback);
+        }
+    }
+    public function on($event,$callback){
+        $this->eventListeners[$event][] = $callback;
     }
 
 }
