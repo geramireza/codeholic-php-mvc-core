@@ -1,6 +1,7 @@
 <?php
 namespace Codeholic\Phpmvc;
 use App\Controllers\Controller;
+use Codeholic\Phpmvc\Exceptions\NotFoundException;
 
 class Router
 {
@@ -26,7 +27,7 @@ class Router
         $callback = $this->routes[$this->request->method()][$this->request->path()] ?? false;
         if($callback === false){
             $this->response->setStatusCode(404);
-            return Application::$app->view->render('errors._404');
+            throw new NotFoundException();
         }
         if(is_string($callback)){
             return  Application::$app->view->render($callback);
